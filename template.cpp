@@ -35,16 +35,33 @@ inline void read(E *tar, const L len){ for(L i=0; i<len; i++) cin >> tar[i]; }
 template<typename E, typename L>
 inline void read(vector<E> &tar, const L len){if(tar.size()>0) for(L i=0; i<tar.size(); i++) cin >> tar[i]; else for(L i=0; i<len; i++){ E temp; cin >> temp; tar.push_back(temp);}}
 
-double clockCount(void (*function)(), double times=10){
-    double duration=0;
-    for(int i=0; i<times; i++){
-        chrono::high_resolution_clock::time_point t1 = high_resolution_clock::now();
-        function();
-        chrono::high_resolution_clock::time_point t2 = high_resolution_clock::now();
-        duration += duration_cast<microseconds>( t2 - t1 ).count();
-    }
-    return duration/times;
+void clockCounterPrinter(vector<double> readings, double times){
+    double duration=accumulate(readings.begin(), readings.end(), 0.0);
+    duration /= times;
+    string unit=" micro(s)";
+    write(string(42, '-'));
+    cout<<"| Max-TimeTaken |"<<setw(15)<<*max_element(readings.begin(), readings.end())<<unit<<"|\n";
+    write(string(42, '-'));
+    cout<<"| Min-TimeTaken |"<<setw(15)<<*min_element(readings.begin(), readings.end())<<unit<<"|\n";
+    write(string(42, '-'));
+    cout<<"| Avg-TimeTaken |"<<setw(15)<<duration<<unit<<"|\n";
+    write(string(42, '-'));
+    write("\tTotal steps: "+to_string(int(times)));
+
 }
+
+vector<double> clockCount(void (*function)(), double times=10){
+    vector<double> readings(times);
+    for(int i=0; i<times; i++){
+        high_resolution_clock::time_point t1 = high_resolution_clock::now();
+        function();
+        high_resolution_clock::time_point t2 = high_resolution_clock::now();
+        readings[i]=duration_cast<microseconds>( t2 - t1 ).count();
+    }
+    clockCounterPrinter(readings, times);
+    return readings;
+}
+
 
 template<typename E>
 E power(E val, intll expo){
@@ -76,6 +93,12 @@ void cookPrimes(vector<E> &primes, intll upto=MLN){
     }
 }
 
+/** How to use clockCount?
+    clockCount([](){ /// must use lambda function with no return type
+                someFunction(arguments); ///  to measure time.
+               });
+*/
+
 
 int main(){
     BOOSTER
@@ -84,7 +107,3 @@ int main(){
     }
     return 0;
 }
-
-
-
-
