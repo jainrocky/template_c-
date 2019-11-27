@@ -1,3 +1,4 @@
+package main;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.Arrays;
@@ -9,7 +10,7 @@ public class Main {
     final static private int BLN = 1000000000;
     
     public static void main(String[] args) throws IOException {
-        //  howToUse();
+//        howToUse();
     }
     
     private static void howToUse() throws IOException{
@@ -27,7 +28,6 @@ public class Main {
     }
 // Utils
     static class data<T>{ public T val; public data(T v){val=v;} public String toString(){return String.valueOf(val);}} // wrapper for primitive data-type(not for their arrays) to operate with read & write
-    @SuppressWarnings("unchecked")
     public static void read(data<?> d) throws IOException{ //to read only one value data type == not array
         if (d instanceof data){
             if( d.val instanceof Integer || int.class.isAssignableFrom( d.val.getClass() )) ((data<Integer>) d).val = booster.readInt();
